@@ -1,4 +1,6 @@
 //Require modules
+const expressSanitizer = require('express-sanitizer');
+const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const express = require('express')
@@ -6,15 +8,19 @@ const ejs = require('ejs')
 const app = express()
 const port = 3000
 
+
 //connecting mongoose
 mongoose.connect('mongodb://localhost:27017/restful_blog_app', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useFindAndModify', false);
 
 //Setting View engine to ejs
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
+// Mounting express-sanitizer middleware here
+app.use(expressSanitizer());
 app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(methodOverride('_method'))
 
 //Add postSchema to the database
 
@@ -71,8 +77,88 @@ const Blog = mongoose.model('Blog', blogSchema);
 // });
 
 //Routing
-app.get('/', (req, res)=> res.send("Hello World"))
+app.get('/', (req, res)=> res.redirect('/blogs'))
 /* Restful routes */
-app.get('/blogs', (req, res)=> res.render('index'));
 
-app.listen(port, ()=>console.log(`Server started at ${port}`))
+//Index route
+app.get('/blogs', (req, res)=> {
+    Blog.find({}, (err, foundBlogPosts)=>{
+        if(err){
+            console.log("Error in finding blogs from database");
+        } else{
+            res.render('index', {blogs : foundBlogPosts});
+        }
+    });
+
+});
+
+//New route - opens form to add a new blog
+app.get('/blogs/new', (req, res)=>{
+    res.render('new');
+});
+
+//CREATE route a blog route
+app.post('/blogs', (req, res)=>{
+    Blog.create(req.body.blog, (err, newBlog)=>{
+        if(err){
+            console.log("Error while creating new blog");
+            res.render('new');
+        } else {
+            console.log("New blog is succesfully made");
+            res.redirect('/blogs');
+        }
+    });
+});
+
+
+//Show a blog post route
+app.get('/blogs/:id', (req, res)=>{
+   Blog.findOne(req.params._id, (err, showBlog)=>{
+       if(err){
+           console.log("Error is finding the specific blog");
+       } else{
+           res.render('show', {blog : showBlog});
+
+       }
+   });
+});
+
+
+//Edit route
+app.get('/blogs/:id/edit', (req, res)=>{
+    //find blog
+    Blog.findOne(req.params._id, (err, editableBlog)=>{
+        if(err){
+            console.log("Error in finding editable blog");
+        } else{
+             //populate value
+            res.render('edit', {blog : editableBlog});
+        }
+    });
+})
+
+
+//Update route
+app.put('/blogs/:id', (req, res)=>{
+    Blog.findOneAndUpdate(req.param._id, req.body.blog, (err, updatedBlog)=>{
+        if(err){
+            console.log("Error in updating blog");
+        } else{
+            res.redirect(`/blogs/${req.params._id}`);
+        }
+    });
+});
+
+
+//Destroy route
+app.delete('/blogs/:id', (req, res)=>{
+    Blog.findOneAndRemove(req.params._id, (err)=>{
+        if(err){
+            console.log("Error while deleting the blog");
+        } else{
+            res.redirect("/blogs");
+        }
+    } )
+})
+
+app.listen(port, ()=>console.log(`Server is running at ${port}`))

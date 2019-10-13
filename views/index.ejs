@@ -1,1 +1,12 @@
 <h1>This page will show all the blog posts</h1>
+
+<a href="/blogs/new">Create new blog post</a>
+
+<% blogs.forEach((blog)=>{ %>
+        <div>
+        <h5> <%= blog.title %> </h5>
+        <img src="<%=blog.image%>" width="200" height="200" alt="<%=blog.titile%>">
+        <p><%=blog.created.toDateString() %></p>  
+        <p><%=blog.body.substring(0, 99)%> ...<a href="/blogs/<%=blog._id%>">Read More</a></p>
+        </div>
+<% }) %>
