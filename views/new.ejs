@@ -1,13 +1,24 @@
-<h1>Create a new blog</h1>
+<% include ./partials/header %>
+
+
+<div style = "padding : 10vh 25vh" class="container">
+
+        <h1 class="text-center mt-4 mb-5">Create a new blog</h1>
+
+        <form action="/blogs" method="POST">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Title" name="blog[title]">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Image URL" name="blog[image]">
+            </div>
+            <div class="form-group">
+                 <textarea name="blog[body]" class="form-control" id="blogBody" cols="30" rows="10" placeholder="Description"></textarea>
+            </div> 
+            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+        </form>
+</div>
 
 
 
-<form action="/blogs" method="POST">
-    <input type="text" placeholder="Title" name="blog[title]"><br>
-    <br>
-    <input type="text" placeholder="Image URL" name="blog[image]"><br>
-    <br>
-    <textarea name="blog[body]" id="blogBody" cols="30" rows="10" placeholder="Description"></textarea><br>
-    <br>
-    <input type="submit">
-</form>
+<% include ./partials/footer %>

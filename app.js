@@ -115,9 +115,9 @@ app.post('/blogs', (req, res)=>{
 
 //Show a blog post route
 app.get('/blogs/:id', (req, res)=>{
-   Blog.findById(req.params.id, (err, showBlog)=>{
+   Blog.findById({_id : req.params.id}, (err, showBlog)=>{
        if(err){
-           console.log("Error is finding the specific blog");
+           console.log("Error is finding the specific blog" + err);
        } else{
            console.log(showBlog);
            res.render('show', {blog : showBlog});
