@@ -6,11 +6,17 @@ const mongoose = require('mongoose')
 const express = require('express')
 const ejs = require('ejs')
 const app = express()
-const port = 3000
+
+//Port
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
 
 
 //connecting mongoose
-mongoose.connect('mongodb://localhost:27017/restful_blog_app', {useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect('mongodb://localhost:27017/restful_blog_app', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://blogUser:blogUser123@blog-0iat1.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
 
