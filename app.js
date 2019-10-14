@@ -2,6 +2,7 @@
 const expressSanitizer = require('express-sanitizer');
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
+const cool = require('cool-ascii-faces')
 const mongoose = require('mongoose')
 const express = require('express')
 const ejs = require('ejs')
@@ -162,5 +163,9 @@ app.delete('/blogs/:id', (req, res)=>{
         }
     } )
 })
+
+
+//For heroku
+app.get('/cool', (req, res) => res.send(cool()))
 
 app.listen(port, ()=>console.log(`Server is running at ${port}`))
