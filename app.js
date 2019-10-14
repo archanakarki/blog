@@ -80,7 +80,9 @@ const Blog = mongoose.model('Blog', blogSchema);
 // });
 
 //Routing
-app.get('/', (req, res)=> res.redirect('/blogs'))
+// app.get('/', (req, res)=> res.redirect('/blogs'))
+app.get('/', (req, res)=> res.send('Hello'))
+
 /* Restful routes */
 
 //Index route
