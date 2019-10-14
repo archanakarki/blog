@@ -18,8 +18,8 @@ mongoose.set('useFindAndModify', false);
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 // Mounting express-sanitizer middleware here
-app.use(expressSanitizer());
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(expressSanitizer());
 app.use(methodOverride('_method'))
 
 //Add postSchema to the database
@@ -99,6 +99,8 @@ app.get('/blogs/new', (req, res)=>{
 
 //CREATE route a blog route
 app.post('/blogs', (req, res)=>{
+    //Sanitising the create blog function
+    req.body.blog.body = req.sanitize(req.body.blog.body)
     Blog.create(req.body.blog, (err, newBlog)=>{
         if(err){
             console.log("Error while creating new blog");
@@ -113,12 +115,12 @@ app.post('/blogs', (req, res)=>{
 
 //Show a blog post route
 app.get('/blogs/:id', (req, res)=>{
-   Blog.findOne(req.params._id, (err, showBlog)=>{
+   Blog.findById(req.params.id, (err, showBlog)=>{
        if(err){
            console.log("Error is finding the specific blog");
        } else{
+           console.log(showBlog);
            res.render('show', {blog : showBlog});
-
        }
    });
 });
@@ -127,7 +129,7 @@ app.get('/blogs/:id', (req, res)=>{
 //Edit route
 app.get('/blogs/:id/edit', (req, res)=>{
     //find blog
-    Blog.findOne(req.params._id, (err, editableBlog)=>{
+    Blog.findById(req.params.id, (err, editableBlog)=>{
         if(err){
             console.log("Error in finding editable blog");
         } else{
@@ -140,11 +142,11 @@ app.get('/blogs/:id/edit', (req, res)=>{
 
 //Update route
 app.put('/blogs/:id', (req, res)=>{
-    Blog.findOneAndUpdate(req.param._id, req.body.blog, (err, updatedBlog)=>{
+    Blog.findOneAndUpdate(req.params.id, req.body.blog, (err, updatedBlog)=>{
         if(err){
             console.log("Error in updating blog");
         } else{
-            res.redirect(`/blogs/${req.params._id}`);
+            res.redirect(`/blogs/${req.params.id}`);
         }
     });
 });
@@ -152,7 +154,7 @@ app.put('/blogs/:id', (req, res)=>{
 
 //Destroy route
 app.delete('/blogs/:id', (req, res)=>{
-    Blog.findOneAndRemove(req.params._id, (err)=>{
+    Blog.findOneAndRemove(req.params.id, (err)=>{
         if(err){
             console.log("Error while deleting the blog");
         } else{

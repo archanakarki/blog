@@ -6,7 +6,8 @@
         <div>
         <h5> <%= blog.title %> </h5>
         <img src="<%=blog.image%>" width="200" height="200" alt="<%=blog.titile%>">
-        <p><%=blog.created.toDateString() %></p>  
-        <p><%=blog.body.substring(0, 99)%> ...<a href="/blogs/<%=blog._id%>">Read More</a></p>
+        <p><%=blog.created.toDateString() %></p>
+        <h1><%=blog._id%></h1>  
+        <p><%=blog.body.substring(0, 99)%> .... <a href="/blogs/<%=blog._id%>">Read More</a></p>
         </div>
 <% }) %>
