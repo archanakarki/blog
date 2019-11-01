@@ -13,7 +13,7 @@ let port = process.env.PORT || 3000;
 
 //connecting mongoose
 // mongoose.connect('mongodb://localhost:27017/restful_blog_app', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect('mongodb://blog:blogUser123@ds235078.mlab.com:35078/blog', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://blogUser:blogUser123@blog-0iat1.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useFindAndModify', false);
 
